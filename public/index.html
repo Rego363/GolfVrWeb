@@ -1,0 +1,64 @@
+<html>
+
+<head>
+  <title>GolfVR Login</title>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div id="login_div" class="main-div">
+    <h3> GolfVR</h3>
+    <input type="email" placeholder="Email..." id="email_field" />
+    <input type="password" placeholder="Password..." id="password_field" />
+
+    <button onclick="login()">Login to Account</button>
+    <br>
+    <button onclick="createAcc()">Create an account</button>
+  </div>
+
+  <div id="user_div" class="loggedin-div">
+    <h3>Welcome User</h3>
+    <p id="user_para">Welcome to GolfVR. You're currently logged in.</p>
+    <a href="course.html"><button>Register course</button></a>
+    <br>
+    <a href="edit.html"><button>Update course</button></a>
+    <br>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <div id="signup_div" class="main-div">
+    <h3>Create an account</h3>
+    <input type="email" placeholder="Email..." id="email_field_sign_up" />
+    <input type="password" placeholder="Password..." id="password_field_sign_up" />
+
+    <button onclick="signUp()">Sign up</button>
+    <br>
+    <button onclick="goLogin()">Already have an Account?</button>
+  </div>
+
+
+
+
+  <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyAeDiJAzk65_JymrgMddLe2AawPqyxu9LM",
+      authDomain: "fir-web-login-f0757.firebaseapp.com",
+      databaseURL: "https://fir-web-login-f0757.firebaseio.com",
+      projectId: "fir-web-login-f0757",
+      storageBucket: "",
+      messagingSenderId: "688440892792"
+    };
+    firebase.initializeApp(config);
+
+  </script>
+
+  <script src="js/index.js"></script>
+
+
+</body>
+
+</html>

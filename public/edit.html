@@ -1,0 +1,302 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Edit Course</title>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" href="upload.css" />
+</head>
+
+<body id="header_body" class="header-body" onload=hide()>
+  <h1 id="course_head">Edit Course</h1>
+</body>
+
+<body>
+
+  <div id="course_div" class="course_div">
+    <h3>Select a course</h3>
+    <select id="selectCourse" onchange="getMaxHole(this.value)">
+      <option value="" disabled selected>Select</option>
+    </select>
+  </div>
+
+  <div id="holes_div" class="holes-div" onchange="revealArea()">
+    <h3>Select a hole</h3>
+    <select id="holes">
+      <option value="" disabled selected>Select</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+    <option value="13">13</option>
+    <option value="14">14</option>
+    <option value="15">15</option>
+    <option value="16">16</option>
+    <option value="17">17</option>
+    <option value="18">18</option>
+  </select>
+  </div>
+
+  <div id="nine_holes_div" class="nine-holes-div" onchange="revealArea()">
+    <h3>Select a hole</h3>
+    <select id="holes">
+      <option value="" disabled selected>Select</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+  </select>
+  </div>
+
+  <div id="section_div" class="section-div" onchange="revealUpload()">
+    <h3>Select an area</h3>
+    <select id="section">
+      <option value="" disabled selected>Select</option>
+    <option value="Teebox">Teebox</option>
+    <option value="Fairway">Fairway</option>
+    <option value="Green">Green</option>
+  </select>
+  </div>
+  <br>
+  <br>
+
+  <body id="upload_body" class="upload-body">
+
+    <div id="upload_div" class="upload-div">
+      <progress value="0" max="100" id="uploader">0%</progress>
+      <input type="file" value="upload" id="fileButton" />
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+    <script>
+      //var config = {
+      //  apiKey: "AIzaSyDH1VbfPmsLp1070XW8ioBb4kYGQWtsgzI",
+      //  authDomain: "golfbackend-wss.firebaseapp.com",
+      //  databaseURL: "https://golfbackend-wss.firebaseio.com",
+      //  projectId: "golfbackend-wss",
+      //  storageBucket: "golfbackend-wss.appspot.com",
+      //  messagingSenderId: "624043849669"
+      //};
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyAeDiJAzk65_JymrgMddLe2AawPqyxu9LM",
+        authDomain: "fir-web-login-f0757.firebaseapp.com",
+        databaseURL: "https://fir-web-login-f0757.firebaseio.com",
+        projectId: "fir-web-login-f0757",
+        storageBucket: "gs://fir-web-login-f0757.appspot.com",
+        messagingSenderId: "688440892792"
+      };
+
+
+      var courseMaxHole = document.getElementById('selectCourse').value;
+      firebase.initializeApp(config);
+      firebase.auth().onAuthStateChanged(function(user)
+      {
+        if (user)
+        {
+          // User is signed in.
+          var user = firebase.auth().currentUser;
+
+          if (user != null)
+          {
+            var email_id = user.email;
+            localStorage.setItem('user', JSON.stringify(email_id));
+          }
+        }
+        else
+        {
+          // No user is signed in.
+          //document.getElementById("user_div").style.display = "none";
+          //document.getElementById("login_div").style.display = "block";
+          //document.getElementById("signup_div").style.display = "none";
+        }
+      });
+      database = firebase.database();
+      var ref = database.ref();
+
+      function getUser(course)
+      {
+        //  console.log(course);
+        var userRef = database.ref().orderByChild("name").equalTo(course).on('value', function(snapshot)
+        {
+
+          //console.log(snapshot.val());
+
+          snapshot.forEach(function(childSnapshot)
+          {
+            var key = childSnapshot.key;
+            var childData = childSnapshot.val();
+            console.log(childData.user);
+            localStorage.setItem('userDataBase', JSON.stringify(childData.user));
+
+          });
+        });
+      }
+
+      function getMaxHole(course)
+      {
+
+        console.log(course);
+        var maxHoleRef = database.ref().orderByChild("name").equalTo(course).on('value', function(snapshot)
+        {
+
+          console.log(snapshot.val());
+
+          snapshot.forEach(function(childSnapshot)
+          {
+            var key = childSnapshot.key;
+            var childData = childSnapshot.val();
+
+            console.log(childData.maxHoles);
+            var hole = document.getElementById('holes').value;
+            var hole = document.getElementById('holes').value;
+            if (childData.maxHoles < 10)
+            {
+              document.getElementById("nine_holes_div").style.display = "block";
+              document.getElementById("holes_div").style.display = "none";
+            }
+            else
+            {
+              document.getElementById("nine_holes_div").style.display = "none";
+              document.getElementById("holes_div").style.display = "block";
+            }
+          });
+        });
+      }
+      ref.on('value', gotData, errData);
+
+      function gotData(data)
+      {
+        console.log(data.val());
+        var course = data.val();
+        var keys = Object.keys(course);
+        document.getElementById("selectCourse").options.length = 0;
+        var select = document.getElementById("selectCourse"),
+          keys;
+        var option = document.createElement("Option");
+        txt = document.createTextNode("Select");
+        option.appendChild(txt);
+        option.setAttribute("value", "Select");
+        option.setAttribute("selected", "true");
+        option.setAttribute("disabled", "disabled");
+        select.insertBefore(option, select.lastChild);
+
+        for (var i = 0; i < keys.length; i++)
+        {
+          getUser(keys[i]);
+          if (getEmail() === getEmailDataBase())
+          {
+            var option = document.createElement("Option");
+            txt = document.createTextNode(keys[i]);
+            option.appendChild(txt);
+            option.setAttribute("value", keys[i]);
+            select.insertBefore(option, select.lastChild);
+          }
+        }
+        console.log(keys);
+      }
+
+      function errData(err)
+      {
+        console.log('Error!');
+        console.log(err);
+      }
+      // Get elements
+      var uploader = document.getElementById('uploader');
+      var fileButton = document.getElementById('fileButton');
+
+      //Listen for file selection
+      fileButton.addEventListener('change', function(e)
+      {
+        // get file
+        var file = e.target.files[0];
+
+        console.log(file.type.substring(0, 5));
+
+        var course = document.getElementById('selectCourse').value;
+        var hole = document.getElementById('holes').value;
+        var section = document.getElementById('section').value;
+        var fileType = file.type.substring(0, 5);
+        //Create a storage ref
+        var storageRefImage = firebase.storage().ref("/course/" + course + '/' + hole + '/' + section + '/' + 'Image/' + file.name);
+        var storageRefAudio = firebase.storage().ref("/course/" + course + '/' + hole + '/' + section + '/' + 'Audio/' + file.name);
+
+        //Create a
+
+        //Upload File
+        if (fileType == 'image')
+        {
+          var task = storageRefImage.put(file);
+
+        }
+        else if (fileType == 'audio')
+        {
+          var task = storageRefAudio.put(file);
+        }
+        else
+        {
+          window.alert("File type not supported");
+          return;
+        }
+
+        //Update progress bar
+        task.on('state_changed',
+          function progress(snapshot)
+          {
+            var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            uploader.value = percentage;
+            console.log(uploader.value);
+          },
+
+          function error(err)
+          {
+            window.alert("You need to Log In to upload a file");
+          },
+
+          function complete()
+          {
+
+            uploader.value = 0;
+            task.snapshot.ref.getDownloadURL().then(function(downloadURL)
+            {
+              console.log('File available at', downloadURL);
+              var downloadLink = downloadURL;
+              var postKey = firebase.database().ref('Posts/').push().key;
+              console.log(downloadURL);
+              var updates = {};
+              var postData = {
+                url: downloadLink
+              };
+              updates['/' + course + '/' + '/' + hole + '/' + '/' + section + '/' + fileType] = postData;
+              firebase.database().ref().update(updates);
+              window.alert("upload Complete!");
+            });
+
+
+          });
+      });
+
+    </script>
+  </body>
+  <br>
+  </div>
+
+  <div id="back_div" class="back-div">
+    <a href="index.html"><button>Back</button></a>
+  </div>
+
+  <script src="js/edit.js"></script>
+
+</html>

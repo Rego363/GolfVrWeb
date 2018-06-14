@@ -1,0 +1,80 @@
+body{
+  background: #fff;
+  padding: 0px;
+  margin: 0px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+input, button{
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+}
+
+.holes-div, .nine-holes-div
+{
+  background: #fff;
+  padding: -0px;
+  margin: -0px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+}
+
+.upload-body button, .upload-div button{
+  background: #5d8ffc;
+  color: #fff;
+  border: 1px solid #5d8ffc;
+  border-radius: 5px;
+  padding: 15px;
+  display: block;
+  width: 100%;
+  transition: 0.3s;
+  -webkit-transition:0.3s;
+  -moz-transition:0.3s;
+}
+
+.upload-body button:hover, .upload-div button:hover{
+  background: #fff;
+  color: #5d8ffc;
+  border: 1px solid #5d8ffc;
+  cursor: pointer;
+}
+
+.back-body{
+  width: 20%;
+  margin: 0px auto;
+  margin-top: 150px;
+  padding:20px;
+  display: none;
+}
+
+.back-div button{
+  background: #5d8ffc;
+  color: #fff;
+  border: 1px solid #5d8ffc;
+  border-radius: 5px;
+  padding: 15px;
+  display: block;
+  width: 100%;
+  transition: 0.3s;
+  -webkit-transition:0.3s;
+  -moz-transition:0.3s;
+}
+
+.back-div button:hover{
+  background: #fff;
+  color: #5d8ffc;
+  border: 1px solid #5d8ffc;
+  cursor: pointer;
+}
+
+#uploader {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 200%;
+  margin-left: -125px;
+  margin-bottom: 10px;
+}

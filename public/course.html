@@ -1,0 +1,100 @@
+<html>
+
+<head>
+  <title>Course Register</title>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div id="reg_header_div" class="reg-header-div">
+    <h1> Register your course </h1>
+  </div>
+
+  <div id="reg_name_div" class="reg-name-div">
+    <h3>Enter the name of your Golf Course</h3>
+    <input type="courseName" onchange="check(JSON.parse(localStorage.getItem('name')))" placeholder="e.g. Carlow Golf Course" id="course_name_field" />
+  </div>
+
+
+
+  <div id="reg_holes_div" class="reg-holes-div">
+    <h3>Enter the number of holes on your Golf Course</h3>
+    <select id="holes">
+    <option value="9">9</option>
+    <option value="18" selected>18</option>
+  </select>
+  </div>
+
+  <div id="reg_submit_div" class="reg-submit-div">
+    <button onclick="reg(); submit(); ">Submit</button></a>
+  </div>
+
+  <br>
+  <br>
+  <br>
+
+  <div id="back_div" class="back-div">
+    <a href="index.html"><button>Back</button></a>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyAeDiJAzk65_JymrgMddLe2AawPqyxu9LM",
+      authDomain: "fir-web-login-f0757.firebaseapp.com",
+      databaseURL: "https://fir-web-login-f0757.firebaseio.com",
+      projectId: "fir-web-login-f0757",
+      storageBucket: "gs://fir-web-login-f0757.appspot.com",
+      messagingSenderId: "688440892792"
+    };
+
+    firebase.initializeApp(config);
+
+
+
+    database = firebase.database();
+    var ref = database.ref();
+
+    ref.on('value', gotData, errData);
+
+    function gotData(data)
+    {
+      var course = data.val();
+      var keys = Object.keys(course);
+      localStorage.setItem('name', JSON.stringify(keys));
+    }
+
+    function errData()
+    {
+
+    }
+
+    function reg()
+    {
+      var course = document.getElementById("course_name_field").value;
+      var lastHole = document.getElementById('holes').value;
+
+      var maxHole = {};
+
+      console.log(localStorage.getItem('user'))
+
+      var nameMaxHolesData = {
+        name: course,
+        maxHoles: lastHole,
+        user: JSON.parse(localStorage.getItem('user'))
+      };
+      maxHole['/' + course + '/'] = nameMaxHolesData;
+      firebase.database().ref().update(maxHole);
+    };
+
+  </script>
+
+  <script src="js/course.js"></script>
+  <script src="js/upload.js"></script>
+
+</body>
+
+</html>
