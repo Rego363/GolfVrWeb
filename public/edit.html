@@ -15,15 +15,14 @@
 
   <div id="course_div" class="course_div">
     <h3>Select a course</h3>
-    <select id="selectCourse" onchange="getMaxHole(this.value)">
-      <option value="" disabled selected>Select</option>
+    <select id="selectCourse" onchange="getMaxHole(this.value); hideSection()">
+    <option value="default" disabled selected hidden>Select</option>
     </select>
   </div>
-
-  <div id="holes_div" class="holes-div" onchange="revealArea()">
+  <div id="holes_div" class="holes-div">
     <h3>Select a hole</h3>
-    <select id="holes">
-      <option value="" disabled selected>Select</option>
+    <select id="18holes" onchange="revealArea()">
+      <option value="default" disabled selected hidden>Select</option>
     <option value="1">1</option>
     <option value="2">2</option>
     <option value="3">3</option>
@@ -45,10 +44,10 @@
   </select>
   </div>
 
-  <div id="nine_holes_div" class="nine-holes-div" onchange="revealArea()">
+  <div id="nine_holes_div" class="nine-holes-div">
     <h3>Select a hole</h3>
-    <select id="holes">
-      <option value="" disabled selected>Select</option>
+    <select id="9holes" onchange="revealArea()">
+      <option value="default" disabled selected hidden>Select</option>
     <option value="1">1</option>
     <option value="2">2</option>
     <option value="3">3</option>
@@ -64,7 +63,7 @@
   <div id="section_div" class="section-div" onchange="revealUpload()">
     <h3>Select an area</h3>
     <select id="section">
-      <option value="" disabled selected>Select</option>
+    <option value="default" disabled selected hidden>Select</option>
     <option value="Teebox">Teebox</option>
     <option value="Fairway">Fairway</option>
     <option value="Green">Green</option>
@@ -74,8 +73,7 @@
   <br>
 
   <body id="upload_body" class="upload-body">
-
-    <div id="upload_div" class="upload-div">
+    <div id="upload_div" class="upload-div" onclick="storeHoleName(); errorCheckFields()">
       <progress value="0" max="100" id="uploader">0%</progress>
       <input type="file" value="upload" id="fileButton" />
     </div>
@@ -99,24 +97,17 @@
         messagingSenderId: "688440892792"
       };
 
-
-      var courseMaxHole = document.getElementById('selectCourse').value;
       firebase.initializeApp(config);
-      firebase.auth().onAuthStateChanged(function(user)
-      {
-        if (user)
-        {
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
           // User is signed in.
           var user = firebase.auth().currentUser;
 
-          if (user != null)
-          {
+          if (user != null) {
             var email_id = user.email;
             localStorage.setItem('user', JSON.stringify(email_id));
           }
-        }
-        else
-        {
+        } else {
           // No user is signed in.
           //document.getElementById("user_div").style.display = "none";
           //document.getElementById("login_div").style.display = "block";
@@ -126,16 +117,41 @@
       database = firebase.database();
       var ref = database.ref();
 
-      function getUser(course)
-      {
+      function errorCheckFields() {
+
+        var course = document.getElementById('selectCourse').value;
+        if (document.getElementById("nine_holes_div").style.display == "none") {
+          var hole = document.getElementById('18holes').value;
+        } else {
+          var hole = document.getElementById('9holes').value;
+        }
+
+        var section = document.getElementById('section').value;
+
+        if (course === "default") {
+          window.alert("Please select a course");
+          return;
+        }
+        //Check if the hole field is selected
+        if (hole === "default") {
+          window.alert("Please select a hole");
+          return;
+        }
+
+        if (section === "default") {
+          window.alert("Please select a section of the course");
+          return;
+        }
+
+      }
+
+      function getUser(course) {
         //  console.log(course);
-        var userRef = database.ref().orderByChild("name").equalTo(course).on('value', function(snapshot)
-        {
+        var userRef = database.ref().orderByChild("name").equalTo(course).on('value', function(snapshot) {
 
           //console.log(snapshot.val());
 
-          snapshot.forEach(function(childSnapshot)
-          {
+          snapshot.forEach(function(childSnapshot) {
             var key = childSnapshot.key;
             var childData = childSnapshot.val();
             console.log(childData.user);
@@ -145,30 +161,23 @@
         });
       }
 
-      function getMaxHole(course)
-      {
+      function getMaxHole(course) {
+
 
         console.log(course);
-        var maxHoleRef = database.ref().orderByChild("name").equalTo(course).on('value', function(snapshot)
-        {
+        var maxHoleRef = database.ref().orderByChild("name").equalTo(course).on('value', function(snapshot) {
 
           console.log(snapshot.val());
 
-          snapshot.forEach(function(childSnapshot)
-          {
+          snapshot.forEach(function(childSnapshot) {
             var key = childSnapshot.key;
             var childData = childSnapshot.val();
 
             console.log(childData.maxHoles);
-            var hole = document.getElementById('holes').value;
-            var hole = document.getElementById('holes').value;
-            if (childData.maxHoles < 10)
-            {
+            if (childData.maxHoles < 10) {
               document.getElementById("nine_holes_div").style.display = "block";
               document.getElementById("holes_div").style.display = "none";
-            }
-            else
-            {
+            } else {
               document.getElementById("nine_holes_div").style.display = "none";
               document.getElementById("holes_div").style.display = "block";
             }
@@ -177,8 +186,8 @@
       }
       ref.on('value', gotData, errData);
 
-      function gotData(data)
-      {
+
+      function gotData(data) {
         console.log(data.val());
         var course = data.val();
         var keys = Object.keys(course);
@@ -189,15 +198,18 @@
         txt = document.createTextNode("Select");
         option.appendChild(txt);
         option.setAttribute("value", "Select");
-        option.setAttribute("selected", "true");
         option.setAttribute("disabled", "disabled");
+        option.setAttribute("hidden", true);
+        if (getCourseName() === 'default') {
+          option.setAttribute("selected", "selected");
+        }
+        var test = getCourseName();
+        console.log(getCourseName());
         select.insertBefore(option, select.lastChild);
 
-        for (var i = 0; i < keys.length; i++)
-        {
+        for (var i = 0; i < keys.length; i++) {
           getUser(keys[i]);
-          if (getEmail() === getEmailDataBase())
-          {
+          if (getEmail() === getEmailDataBase()) {
             var option = document.createElement("Option");
             txt = document.createTextNode(keys[i]);
             option.appendChild(txt);
@@ -205,72 +217,70 @@
             select.insertBefore(option, select.lastChild);
           }
         }
+        if (getCourseName() != 'default') {
+          document.getElementById('selectCourse').value = getCourseName();
+        }
+
         console.log(keys);
       }
 
-      function errData(err)
-      {
+      function errData(err) {
         console.log('Error!');
         console.log(err);
       }
       // Get elements
       var uploader = document.getElementById('uploader');
       var fileButton = document.getElementById('fileButton');
-
       //Listen for file selection
-      fileButton.addEventListener('change', function(e)
-      {
+      fileButton.addEventListener('change', function(e) {
         // get file
         var file = e.target.files[0];
 
         console.log(file.type.substring(0, 5));
 
         var course = document.getElementById('selectCourse').value;
-        var hole = document.getElementById('holes').value;
+        console.log(document.getElementById("nine_holes_div").style.display);
+        if (document.getElementById("nine_holes_div").style.display == "none") {
+          var hole = document.getElementById('18holes').value;
+        } else {
+          var hole = document.getElementById('9holes').value;
+        }
+
         var section = document.getElementById('section').value;
         var fileType = file.type.substring(0, 5);
         //Create a storage ref
         var storageRefImage = firebase.storage().ref("/course/" + course + '/' + hole + '/' + section + '/' + 'Image/' + file.name);
         var storageRefAudio = firebase.storage().ref("/course/" + course + '/' + hole + '/' + section + '/' + 'Audio/' + file.name);
 
-        //Create a
+        //Check if all fields are valid
+        errorCheckFields();
 
         //Upload File
-        if (fileType == 'image')
-        {
+        if (fileType == 'image') {
           var task = storageRefImage.put(file);
 
-        }
-        else if (fileType == 'audio')
-        {
+        } else if (fileType == 'audio') {
           var task = storageRefAudio.put(file);
-        }
-        else
-        {
+        } else {
           window.alert("File type not supported");
           return;
         }
-
         //Update progress bar
         task.on('state_changed',
-          function progress(snapshot)
-          {
+          function progress(snapshot) {
             var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             uploader.value = percentage;
             console.log(uploader.value);
           },
 
-          function error(err)
-          {
+          function error(err) {
             window.alert("You need to Log In to upload a file");
           },
 
-          function complete()
-          {
+          function complete() {
 
             uploader.value = 0;
-            task.snapshot.ref.getDownloadURL().then(function(downloadURL)
-            {
+            task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
               console.log('File available at', downloadURL);
               var downloadLink = downloadURL;
               var postKey = firebase.database().ref('Posts/').push().key;
@@ -282,17 +292,16 @@
               updates['/' + course + '/' + '/' + hole + '/' + '/' + section + '/' + fileType] = postData;
               firebase.database().ref().update(updates);
               window.alert("upload Complete!");
+              getHoleNumber();
             });
 
 
           });
       });
-
     </script>
   </body>
   <br>
   </div>
-
   <div id="back_div" class="back-div">
     <a href="index.html"><button>Back</button></a>
   </div>
