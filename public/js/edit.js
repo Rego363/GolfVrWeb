@@ -25,11 +25,6 @@ function getCourseName()
 {
   return JSON.parse(localStorage.getItem('selectCourseName'));
 }
-function getHoleNumber()
-{
-  document.getElementById("9holes").value = "1";
-  document.getElementById("18holes").value = "1";
-}
 function getEmailDataBase()
 {
   return JSON.parse(localStorage.getItem('userDataBase'));
@@ -75,9 +70,4 @@ function storeHoleName()
 {
   var selectHoleName = document.getElementById("selectCourse").value;
   localStorage.setItem('selectCourseName', JSON.stringify(selectHoleName));
-}
-
-function storeHoleNumber()
-{
-  localStorage.setItem('selectHoleNumber', JSON.stringify("1"));
 }

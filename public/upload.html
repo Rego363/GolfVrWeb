@@ -16,63 +16,60 @@
   <div id="nine_holes_div" class="nine-holes-div">
     <h3>Select a hole</h3>
     <select id="holes">
-      <option value="1" selected>1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-    </select>
+    <option value="1" selected>1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+  </select>
     <br>
   </div>
 
   <div id="holes_div" class="holes-div">
     <h3>Select a hole</h3>
     <select id="holes">
-      <option value="1" selected>1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-      <option value="11">11</option>
-      <option value="12">12</option>
-      <option value="13">13</option>
-      <option value="14">14</option>
-      <option value="15">15</option>
-      <option value="16">16</option>
-      <option value="17">17</option>
-      <option value="18">18</option>
-    </select>
+    <option value="1" selected>1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+    <option value="13">13</option>
+    <option value="14">14</option>
+    <option value="15">15</option>
+    <option value="16">16</option>
+    <option value="17">17</option>
+    <option value="18">18</option>
+  </select>
   </div>
 
 
   <div id="section_div" class="section-div">
     <h3>Select an area</h3>
     <select id="section">
-      <option value="Teebox" selected>Teebox</option>
-      <option value="Fairway">Fairway</option>
-      <option value="Green">Green</option>
-    </select>
+    <option value="Teebox" selected>Teebox</option>
+    <option value="Fairway">Fairway</option>
+    <option value="Green">Green</option>
+  </select>
   </div>
-
   <br>
   <br>
 
   <body id="upload_body" class="upload-body">
-
     <div id="upload_div" class="upload-div">
       <progress value="0" max="100" id="uploader">0%</progress>
       <input type="file" value="upload" id="fileButton" />
     </div>
-
     <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
     <script>
       // Initialize Firebase
@@ -93,8 +90,7 @@
       var fileButton = document.getElementById('fileButton');
 
       //Listen for file selection
-      fileButton.addEventListener('change', function(e)
-      {
+      fileButton.addEventListener('change', function(e) {
         // get file
         var file = e.target.files[0];
 
@@ -112,42 +108,32 @@
         //Create a
 
         //Upload File
-        if (fileType == 'image')
-        {
+        if (fileType == 'image') {
           var task = storageRefImage.put(file);
 
-        }
-        else if (fileType == 'audio')
-        {
+        } else if (fileType == 'audio') {
           var task = storageRefAudio.put(file);
-        }
-        else
-        {
+        } else {
           window.alert("File type not supported");
           return;
         }
 
         //Update progress bar
         task.on('state_changed',
-          function progress(snapshot)
-          {
+          function progress(snapshot) {
             var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             uploader.value = percentage;
             console.log(uploader.value);
           },
 
-          function error(err)
-          {
-            console.log(err)
+          function error(err) {
             window.alert("You need to Log In to upload a file");
           },
 
-          function complete()
-          {
+          function complete() {
 
             uploader.value = 0;
-            task.snapshot.ref.getDownloadURL().then(function(downloadURL)
-            {
+            task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
               console.log('File available at', downloadURL);
               var downloadLink = downloadURL;
               var postKey = firebase.database().ref('Posts/').push().key;
@@ -157,19 +143,12 @@
               var postData = {
                 url: downloadLink
               };
-              var nameMaxHolesData = {
-                name: course,
-                maxHoles: lastHole.options[lastHole.options.length - 1].value
-              };
               updates['/' + course + '/' + '/' + hole + '/' + '/' + section + '/' + fileType] = postData;
               firebase.database().ref().update(updates);
-              //maxHole['/'+ course + '/'] = nameMaxHolesData;
-              //firebase.database().ref().update(maxHole);
               window.alert("upload Complete!");
             });
           });
       });
-
     </script>
   </body>
   <br>

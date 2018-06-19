@@ -1,3 +1,29 @@
+function hide()
+{
+//  document.getElementById("nine_holes_div").style.display = "none";
+//  document.getElementById("holes_div").style.display = "none";
+  document.getElementById("section_div").style.display = "none";
+  document.getElementById("upload_div").style.display = "none";
+
+}
+function getEmail()
+{
+  return JSON.parse(localStorage.getItem('user'));
+}
+function getEmailDataBase()
+{
+  return JSON.parse(localStorage.getItem('userDataBase'));
+}
+
+
+function revealArea()
+{
+  document.getElementById("section_div").style.display = "block";
+}
+function revealUpload()
+{
+  document.getElementById("upload_div").style.display = "block";
+}
 function init(course, holes)
 {
   localStorage.setItem('course', JSON.stringify(course));

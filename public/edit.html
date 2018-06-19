@@ -239,7 +239,6 @@
         console.log(file.type.substring(0, 5));
 
         var course = document.getElementById('selectCourse').value;
-        console.log(document.getElementById("nine_holes_div").style.display);
         if (document.getElementById("nine_holes_div").style.display == "none") {
           var hole = document.getElementById('18holes').value;
         } else {
@@ -249,11 +248,8 @@
         var section = document.getElementById('section').value;
         var fileType = file.type.substring(0, 5);
         //Create a storage ref
-        var storageRefImage = firebase.storage().ref("/course/" + course + '/' + hole + '/' + section + '/' + 'Image/' + file.name);
-        var storageRefAudio = firebase.storage().ref("/course/" + course + '/' + hole + '/' + section + '/' + 'Audio/' + file.name);
-
-        //Check if all fields are valid
-        errorCheckFields();
+        var storageRefImage = firebase.storage().ref(course + '/' + hole + '/' + section + '/' + 'Image/' + file.name);
+        var storageRefAudio = firebase.storage().ref(course + '/' + hole + '/' + section + '/' + 'Audio/' + file.name);
 
         //Upload File
         if (fileType == 'image') {
@@ -292,7 +288,6 @@
               updates['/' + course + '/' + '/' + hole + '/' + '/' + section + '/' + fileType] = postData;
               firebase.database().ref().update(updates);
               window.alert("upload Complete!");
-              getHoleNumber();
             });
 
 

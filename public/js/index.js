@@ -7,9 +7,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 
     var user = firebase.auth().currentUser;
 
-    if (user != null) {
+    if (user != null)
+    {
       var email_id = user.email;
-      localStorage.setItem('user', JSON.stringify(email_id));
       document.getElementById("user_para").innerHTML = "Welcome User: " + email_id;
     }
   } else {
@@ -20,13 +20,14 @@ firebase.auth().onAuthStateChanged(function(user) {
   }
 });
 
-function login() {
+function login()
+{
 
   var userEmail = document.getElementById("email_field").value;
   var userPass = document.getElementById("password_field").value;
 
   firebase.auth().signInWithEmailAndPassword(userEmail, userPass).catch(function(error) {
-    // Handle Errors here.
+  // Handle Errors here.
     var errorCode = error.code;
     var errorMessage = error.message;
     window.alert("Error: " + errorMessage);
@@ -35,32 +36,36 @@ function login() {
 
 }
 
-function signUp() {
+function signUp()
+{
 
   var userEmail = document.getElementById("email_field_sign_up").value;
   var userPass = document.getElementById("password_field_sign_up").value;
 
   firebase.auth().createUserWithEmailAndPassword(userEmail, userPass).catch(function(error) {
-    // Handle Errors here.
+  // Handle Errors here.
     var errorCode = error.code;
     var errorMessage = error.message;
     window.alert("Error: " + errorMessage);
   });
 }
 
-function createAcc() {
+function createAcc()
+{
   document.getElementById("user_div").style.display = "none";
   document.getElementById("login_div").style.display = "none";
   document.getElementById("signup_div").style.display = "block";
 }
 
-function goLogin() {
+function goLogin()
+{
   document.getElementById("user_div").style.display = "none";
   document.getElementById("login_div").style.display = "block";
   document.getElementById("signup_div").style.display = "none";
 }
 
-function logout() {
+function logout()
+{
   firebase.auth().signOut().then(function() {
     // Sign-out successful.
   }).catch(function(error) {

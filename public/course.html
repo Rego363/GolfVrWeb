@@ -31,14 +31,6 @@
     <button onclick="reg(); submit(); ">Submit</button></a>
   </div>
 
-  <br>
-  <br>
-  <br>
-
-  <div id="back_div" class="back-div">
-    <a href="index.html"><button>Back</button></a>
-  </div>
-
   <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
   <script>
     // Initialize Firebase
@@ -60,26 +52,21 @@
 
     ref.on('value', gotData, errData);
 
-    function gotData(data)
-    {
+    function gotData(data) {
       var course = data.val();
       var keys = Object.keys(course);
       localStorage.setItem('name', JSON.stringify(keys));
     }
 
-    function errData()
-    {
+    function errData() {
 
     }
 
-    function reg()
-    {
+    function reg() {
       var course = document.getElementById("course_name_field").value;
       var lastHole = document.getElementById('holes').value;
 
       var maxHole = {};
-
-      console.log(localStorage.getItem('user'))
 
       var nameMaxHolesData = {
         name: course,
@@ -89,7 +76,6 @@
       maxHole['/' + course + '/'] = nameMaxHolesData;
       firebase.database().ref().update(maxHole);
     };
-
   </script>
 
   <script src="js/course.js"></script>
