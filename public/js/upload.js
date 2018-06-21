@@ -6,6 +6,11 @@ function hide()
   document.getElementById("upload_div").style.display = "none";
 
 }
+function hideProgressDiv()
+{
+  document.getElementById('fileButton').value = "";
+  document.getElementById("upload_bar_div").style.display = "none";
+}
 function getEmail()
 {
   return JSON.parse(localStorage.getItem('user'));

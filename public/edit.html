@@ -72,10 +72,15 @@
   <br>
   <br>
 
-  <body id="upload_body" class="upload-body">
-    <div id="upload_div" class="upload-div" onclick="storeHoleName(); errorCheckFields()">
-      <progress value="0" max="100" id="uploader">0%</progress>
-      <input type="file" value="upload" id="fileButton" />
+  <body id="upload_body" class="section-div">
+    <div id="upload_div" class="section-div" onclick="storeHoleName(); errorCheckFields();">
+      <div class="align-center">
+        <h3>Upload an Image/Audio file</h3>
+      </div>
+      <div id="upload_bar_div" hidden>
+        <progress value="0" max="100" id="uploader">0%</progress>
+      </div>
+      <input type="file" value="upload" id="fileButton" onclick="revealProgressDiv()" />
     </div>
     <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
     <script>
@@ -288,6 +293,7 @@
               updates['/' + course + '/' + '/' + hole + '/' + '/' + section + '/' + fileType] = postData;
               firebase.database().ref().update(updates);
               window.alert("upload Complete!");
+              hideProgressDiv();
             });
 
 

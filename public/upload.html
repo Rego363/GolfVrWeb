@@ -67,6 +67,9 @@
 
   <body id="upload_body" class="upload-body">
     <div id="upload_div" class="upload-div">
+      <div class="align-center">
+        <h3>Upload an Image/Audio file</h3>
+      </div>
       <progress value="0" max="100" id="uploader">0%</progress>
       <input type="file" value="upload" id="fileButton" />
     </div>
@@ -146,6 +149,7 @@
               updates['/' + course + '/' + '/' + hole + '/' + '/' + section + '/' + fileType] = postData;
               firebase.database().ref().update(updates);
               window.alert("upload Complete!");
+              hideProgressDiv();
             });
           });
       });

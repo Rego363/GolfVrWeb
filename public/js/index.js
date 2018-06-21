@@ -9,8 +9,13 @@ firebase.auth().onAuthStateChanged(function(user) {
 
     if (user != null)
     {
+
       var email_id = user.email;
+      localStorage.setItem('user', JSON.stringify(email_id));
       document.getElementById("user_para").innerHTML = "Welcome User: " + email_id;
+      database = firebase.database();
+      var ref = database.ref();
+      ref.on('value', gotData, errData);
     }
   } else {
     // No user is signed in.
@@ -19,6 +24,55 @@ firebase.auth().onAuthStateChanged(function(user) {
     document.getElementById("signup_div").style.display = "none";
   }
 });
+
+
+
+function getEmailDataBase()
+{
+  return JSON.parse(localStorage.getItem('userDataBase'));
+}
+function getEmail()
+{
+  return JSON.parse(localStorage.getItem('user'));
+}
+
+function getUser(course) {
+  //  console.log(course);
+  var userRef = database.ref().orderByChild("name").equalTo(course).on('value', function(snapshot) {
+
+    //console.log(snapshot.val());
+
+    snapshot.forEach(function(childSnapshot) {
+      var key = childSnapshot.key;
+      var childData = childSnapshot.val();
+      console.log(childData.user);
+      localStorage.setItem('userDataBase', JSON.stringify(childData.user));
+
+    });
+  });
+}
+function errData(err) {
+  console.log('Error!');
+  console.log(err);
+}
+function gotData(data) {
+  console.log(data.val());
+  var course = data.val();
+  var keys = Object.keys(course);
+
+  for (var i = 0; i < keys.length; i++) {
+    getUser(keys[i]);
+    if (getEmail() === getEmailDataBase()) {
+     document.getElementById("registerButton_div").style.display = "none";
+     document.getElementById("uploadButton_div").style.display = "block";
+     return;
+    }
+    else {
+      document.getElementById("uploadButton_div").style.display = "none";
+      document.getElementById("registerButton_div").style.display = "block";
+    }
+  }
+}
 
 function login()
 {

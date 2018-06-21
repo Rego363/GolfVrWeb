@@ -83,6 +83,10 @@ input, button{
     width: 100px;
 }
 
+.align-center
+{
+    text-align: center;
+}
 .main-div button:hover, .loggedin-div button:hover, .reg-submit-div button:hover{
   background: #fff;
   color: #5d8ffc;

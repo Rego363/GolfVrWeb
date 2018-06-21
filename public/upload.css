@@ -21,9 +21,11 @@ input, button{
   margin: -0px;
   font-family: 'Nunito', sans-serif;
   font-size: 16px;
+  text-align: left;
 }
 
 .upload-body button, .upload-div button{
+  text-align: center;
   background: #5d8ffc;
   color: #fff;
   border: 1px solid #5d8ffc;
@@ -69,6 +71,10 @@ input, button{
   color: #5d8ffc;
   border: 1px solid #5d8ffc;
   cursor: pointer;
+}
+.align-center
+{
+    text-align: center;
 }
 
 #uploader {

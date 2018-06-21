@@ -8,10 +8,22 @@ function hide()
   localStorage.setItem('selectHoleNumber', JSON.stringify("default"));
 
 }
+function revealProgressDiv()
+{
+  document.getElementById("upload_bar_div").style.display = "block";
+}
+function hideProgressDiv()
+{
+  document.getElementById('fileButton').value = "";
+  document.getElementById("upload_bar_div").style.display = "none";
+}
+
+
 function hideSection()
 {
   document.getElementById("section_div").style.display = "none";
   document.getElementById("upload_div").style.display = "none";
+    document.getElementById("upload_bar_div").style.display = "none";
   document.getElementById("section").value = "default";
   document.getElementById("9holes").value = "default";
   document.getElementById("18holes").value = "default";
